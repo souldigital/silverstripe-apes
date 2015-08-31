@@ -49,7 +49,7 @@ class APES extends DataExtension {
 	 *
 	 * @return string
 	 */
-	public static function get_mailchimp_list_id() {
+	public function get_mailchimp_list_id() {
 		if(defined('SS_MAILCHIMP_LIST_ID')) return SS_MAILCHIMP_LIST_ID;
 		return $this->owner->config()->mailchimp_list_id;
 	}
@@ -167,7 +167,7 @@ class APES extends DataExtension {
 		try {
 			$api = SS_Mailchimp::instance();
 			$subscribe = $api->lists->subscribe(
-				static::get_mailchimp_list_id(),
+				$this->get_mailchimp_list_id(),
 				$this->getMailchimpRef(),
 				$mergeTags,
 				'html',
@@ -194,7 +194,7 @@ class APES extends DataExtension {
 		try {
 			$api = SS_Mailchimp::instance();
 			$api->lists->unsubscribe(
-				static::get_mailchimp_list_id(),
+				$this->get_mailchimp_list_id(),
 				$this->getMailchimpRef()
 			);
 		} catch (Mailchimp_Error $exception) {
@@ -272,7 +272,7 @@ class APES extends DataExtension {
 		try {
 			$groupData = SS_Mailchimp::instance()
 				->lists
-				->interestGroupings(static::get_mailchimp_list_id());
+				->interestGroupings($this->get_mailchimp_list_id());
 		} catch (Mailchimp_Error $exception) {
 			SS_Log::log($exception, SS_Log::ERR);
 			return array();
@@ -296,7 +296,7 @@ class APES extends DataExtension {
 		try {
 			$api = SS_Mailchimp::instance();
 			$result = $api->lists->memberInfo(
-				static::get_mailchimp_list_id(),
+				$this->get_mailchimp_list_id(),
 				array(
 					$this->getMailchimpRef()
 				)
